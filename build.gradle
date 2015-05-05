@@ -1,0 +1,19 @@
+subprojects {
+    apply plugin: 'java'
+
+    sourceCompatibility = 1.8
+    version = '1.0'
+
+    repositories {
+        mavenCentral()
+    }
+}
+
+ext.libraries = [
+        springMvc: 'org.springframework:spring-webmvc:4.1.6.RELEASE',
+        junit: 'junit:junit:4.11',
+        jetty: [
+                'org.eclipse.jetty:jetty-server:9.3.0.M2',
+                'org.eclipse.jetty:jetty-webapp:9.3.0.M2'
+        ],
+]

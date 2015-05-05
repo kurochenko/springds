@@ -1,0 +1,6 @@
+rootProject.name = 'springds'
+
+include 'ui'
+
+include 'app'
+
