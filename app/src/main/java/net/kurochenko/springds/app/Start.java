@@ -9,6 +9,7 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 import org.springframework.web.servlet.DispatcherServlet;
 
 import java.io.IOException;
+import java.util.Properties;
 
 
 /**
@@ -19,11 +20,22 @@ import java.io.IOException;
 public class Start {
 
     private static final String CONFIG_LOCATION = "net.kurochenko.springds.ui";
-    private static final int DEFAULT_PORT = 8080;
-    private static final String DEFAULT_CONTEXT_PATH = "/";
+    private static Properties props;
 
+    /**
+     * Starts Jetty server. Expects first argument as profile name. If not profile is specified, default is used
+     */
     public static void main(String[] args) throws Exception {
-        Server server = new Server(DEFAULT_PORT);
+        String profile = (args.length > 0) ? args[0] : ProfileProperties.PROFILE_DEFAULT;
+
+        try {
+            props = ProfileProperties.getProps(profile);
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+            System.exit(1);
+        }
+
+        Server server = new Server(Integer.valueOf(props.getProperty("port")));
         server.setHandler(getDispatcherServletContext(getWebConfigContext()));
         server.start();
         server.join();
@@ -31,7 +43,7 @@ public class Start {
 
     private static ServletContextHandler getDispatcherServletContext(AnnotationConfigWebApplicationContext context) throws IOException {
         ServletContextHandler handler = new ServletContextHandler();
-        handler.setContextPath(DEFAULT_CONTEXT_PATH);
+        handler.setContextPath(props.getProperty("contextPath"));
         handler.addServlet(new ServletHolder(new DispatcherServlet(context)), "/*");
         handler.addEventListener(new ContextLoaderListener(context));
         handler.setResourceBase(new ClassPathResource("static").getURI().toString());
