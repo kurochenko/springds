@@ -1,0 +1,19 @@
+apply plugin: 'application'
+
+mainClassName = 'net.kurochenko.springds.app.Start'
+
+jar {
+    manifest {
+        attributes "Main-Class": "$mainClassName"
+    }
+
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+dependencies {
+    compile project(':ui')
+    compile libraries.springMvc
+    compile libraries.jetty
+}

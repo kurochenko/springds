@@ -1,0 +1,1 @@
+This file is not used. It's here so static folder required by jetty resource loader is copied on build process.
